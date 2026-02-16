@@ -1,6 +1,7 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 
+
 // Task A:
 func hiddenNumbers(_ values: [String]) {
   // Use compactMap to keep only the numbers and convert them to Int, then print the result.
@@ -17,13 +18,50 @@ func hiddenNumbers(_ values: [String]) {
   }
 }
 
-// Task B:
+// Task B (Now 'Task D'):
 func hauntedArchives(archives: [[[[String]]]]) {
-  if let wantedItem = archives.last?.last?.last?.first {
-    print("The first item of the last item of the last item of the last item: \(wantedItem)")
-  } else {
-    print("The first item of the last item of the last item of the last item doesn't exist")
+  // Old task
+  // if let wantedItem = archives.last?.last?.last?.first {
+  //   print("The first item of the last item of the last item of the last item: \(wantedItem)")
+  // } else {
+  //   print("The first item of the last item of the last item of the last item doesn't exist")
+  // }
+
+  // Find the first word that starts with "e" on the last shelf that contains an "e" word in the
+  //  last room that contains any 4-letter word in the last wing that contains any word starting 
+  // with "e".
+
+  // Find the wing.
+  let targetWing = archives.last { wing in
+    wing.contains { room in 
+      room.contains { shelf in 
+        shelf.contains { word in
+          word.first == "e"
+        }
+      }
+    }
   }
+
+  // Find the room
+  let targetRoom = targetWing?.last { room in
+    room.contains { shelf in
+      shelf.contains { $0.count == 4 }
+    }
+  }
+
+  // Find the shelf
+  let targetShelf = targetRoom?.last {shelf in 
+    shelf.contains { $0.contains("e") }
+  }
+
+  // Find the word.
+  let targetWord = targetShelf?.first { $0.first == "e" }
+
+  // Print everything.
+  print("Target wing: \n", targetWing ?? "No valid wing")
+  print("Target room: \n", targetRoom ?? "No valid room")
+  print("Target shelf: \n", targetShelf ?? "No valid shelf")
+  print("Target word: \n", targetWord ?? "No valid word")
 }
 
 func theMidnightFilter(sightings: [(String, Int)]) {
@@ -74,6 +112,10 @@ struct SwiftPlayground {
       [
         [["stone", "key"], ["relic", "name"]],
         [["cipher", "bone"], ["ember", "seal"]]
+      ],
+      [
+        [["feather", "ink"], ["glow", "eclipse"]],
+        [["riddle", "echo"], ["ember", "glyph"]]
       ]
     ]
     hauntedArchives(archives: archive)
